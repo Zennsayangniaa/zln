@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zennwithniaa - Teddy & Love Story 🧸💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <style>
+        .font-script { font-family: 'Sacramento', cursive; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 50%, #db2777 100%); color: #500724; min-height: 100vh; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 10px 30px 0 rgba(219, 39, 119, 0.25); }
+        .glass-modal { background: rgba(255, 241, 242, 0.95); backdrop-filter: blur(20px); border: 2px solid rgba(244, 114, 182, 0.5); }
+        
+        @keyframes glowing {
+            0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(236, 72, 153, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 35px rgba(219, 39, 119, 0.8); }
+            100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(236, 72, 153, 0.5); }
+        }
+        .glow-text { animation: glowing 3s infinite ease-in-out; }
+
+        @keyframes bounceTeddy {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-10px) scale(1.05) rotate(-3deg); }
+        }
+        .teddy-float { animation: bounceTeddy 3s infinite ease-in-out; }
+
+        @keyframes envelopeOpen {
+            0% { transform: scale(0.85) translateY(20px); opacity: 0; filter: blur(4px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes envelopeClose {
+            0% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+            100% { transform: scale(0.85) translateY(20px); opacity: 0; filter: blur(4px); }
+        }
+        .envelope-in { animation: envelopeOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .envelope-out { animation: envelopeClose 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="min-h-screen pb-28 relative overflow-x-hidden">
+
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <header class="sticky top-0 z-40 glass shadow-md px-4 py-3 flex justify-between items-center border-b border-pink-300">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl teddy-float">🧸</span>
+            <span class="font-bold text-pink-700 tracking-wider text-sm">zennwithniaa 💖</span>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="exportData()" id="export-btn" class="hidden px-2.5 py-1.5 bg-pink-500 text-white text-xs font-semibold rounded-full shadow hover:bg-pink-600 transition">
+                📥 Simpan Permanen
+            </button>
+            <button id="auth-btn" onclick="toggleAuthModal()" class="px-3 py-1.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-semibold rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition flex items-center space-x-1">
+                <span id="auth-icon">🔒</span>
+                <span id="auth-text">Login Pemilik</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HOME DASHBOARD -->
+    <main id="home-view" class="max-w-md mx-auto px-4 pt-6 relative z-10 space-y-6 transition-all duration-300">
+        <div class="text-center space-y-3 py-6 relative glass rounded-3xl p-6 shadow-xl border-2 border-white/80">
+            <div class="text-6xl teddy-float inline-block">🧸💕🧸</div>
+            <h1 class="font-script text-6xl text-pink-700 glow-text drop-shadow">zennwithniaa</h1>
+            <p class="text-xs text-pink-800 font-semibold tracking-wide">Pelukan hangat boneka dan cinta abadi kita berdua 💖</p>
+        </div>
+
+        <!-- MUSIC PLAYER WIDGET -->
+        <div class="glass p-4 rounded-3xl shadow-xl space-y-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xl animate-pulse">🎵</span>
+                    <div>
+                        <h3 class="font-bold text-pink-800 text-xs">Backsound Boneka Cinta Kita</h3>
+                        <p id="current-song-title" class="text-[10px] text-pink-700 font-medium">Romantis Song</p>
+                    </div>
+                </div>
+                <div class="flex space-x-1">
+                    <button onclick="togglePlayMusic()" id="play-pause-btn" class="px-3 py-1.5 bg-pink-600 text-white text-xs font-bold rounded-xl shadow hover:bg-pink-700 transition">
+                        <span id="play-icon">▶️</span> <span id="play-text">Putar</span>
+                    </button>
+                    <button onclick="skipSong()" class="px-2.5 py-1.5 bg-pink-500 text-white text-xs font-bold rounded-xl shadow hover:bg-pink-600 transition" title="Skip Lagu">⏭️</button>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-pink-300">
+                <div class="owner-only hidden">
+                    <label class="cursor-pointer w-full bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-bold py-2 px-3 rounded-xl transition flex items-center justify-center space-x-1 shadow">
+                        <span>➕ Upload Lagu MP3 (Full Utuh)</span>
+                        <input type="file" accept="audio/mp3,audio/*" class="hidden" onchange="uploadSong(event)">
+                    </label>
+                </div>
+                <div class="flex space-x-1">
+                    <input type="text" id="song-search-input" placeholder="Cari lagu romantis..." class="w-full text-xs p-2 rounded-xl bg-white/70 border border-pink-300 text-pink-900 focus:outline-none">
+                    <button onclick="searchTracks()" class="px-3 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl hover:bg-pink-700 transition">Cari</button>
+                </div>
+                <div id="search-results" class="space-y-1 max-h-40 overflow-y-auto"></div>
+            </div>
+        </div>
+        
+        <audio id="bg-audio" preload="auto"></audio>
+
+        <!-- Navigation Menu Tabs -->
+        <div class="grid grid-cols-3 gap-2">
+            <button onclick="switchTab('durasi')" class="p-2.5 rounded-2xl glass font-bold text-[11px] text-pink-800 shadow-md transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">⏳</span><span>Durasi</span></button>
+            <button onclick="switchTab('foto')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">📸</span><span>Album</span></button>
+            <button onclick="switchTab('mood')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">😊</span><span>Mood Harian</span></button>
+            <button onclick="switchTab('kalender')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">📆</span><span>Kalender</span></button>
+            <button onclick="switchTab('surat')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">💬</span><span>Buku Surat</span></button>
+            <button onclick="switchTab('game')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">🎮</span><span>Mini Game</span></button>
+            <button onclick="switchTab('bucket')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">📝</span><span>Bucket List</span></button>
+            <button onclick="switchTab('peta')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">🗺️</span><span>Peta Kenangan</span></button>
+            <button onclick="switchTab('chat')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 hover:bg-white/60"><span class="text-sm">🌌</span><span>Pesan Rahasia</span></button>
+            <button onclick="switchTab('biodata')" class="p-2.5 rounded-2xl glass font-semibold text-[11px] text-pink-900/80 shadow-sm transition flex flex-col items-center justify-center space-y-1 col-span-3 hover:bg-white/60"><span class="text-sm">👥</span><span>Biodata Kita</span></button>
+        </div>
+
+        <footer class="text-center pt-4 pb-8 space-y-2">
+            <div class="owner-only hidden">
+                <button onclick="exportData()" class="text-[11px] bg-pink-600 text-white px-3 py-1.5 rounded-full font-bold shadow hover:bg-pink-700 transition">💾 Simpan Permanen Data Web</button>
+            </div>
+            <p class="text-xs text-pink-900 font-bold">Made with 🧸 & ❤️ for Eternal Love</p>
+        </footer>
+    </main>
+
+    <!-- SUB-VIEW CONTAINER -->
+    <div id="sub-view-container" class="max-w-md mx-auto px-4 pt-4 relative z-20 hidden">
+        <div class="flex items-center mb-4">
+            <button onclick="goBackHome()" class="flex items-center space-x-1 px-3 py-1.5 bg-white/70 hover:bg-white text-pink-900 text-xs font-bold rounded-xl shadow border border-pink-300 transition transform active:scale-95">
+                <span>⬅️</span><span>Kembali</span>
+            </button>
+        </div>
+        <div id="sub-view-content" class="space-y-4"></div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">🧸 Login Pemilik</h3>
+            <input type="text" id="login-user" placeholder="Username" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <input type="password" id="login-pass" placeholder="Password" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <div class="flex space-x-2">
+                <button onclick="toggleAuthModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="handleLogin()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="album-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">📸 Buat Album Baru</h3>
+            <input type="text" id="new-album-name" placeholder="Nama Album" class="w-full text-xs p-3 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <div class="flex space-x-2">
+                <button onclick="closeAddAlbumModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveNewAlbum()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Buat</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="calendar-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">📆 Tambah Momen Spesial</h3>
+            <input type="text" id="cal-title" placeholder="Nama Momen" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <input type="date" id="cal-date" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <div class="flex space-x-2">
+                <button onclick="closeAddCalendarModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveNewCalendar()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="letter-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">💬 Tulis Surat Masa Depan</h3>
+            <input type="text" id="let-title" placeholder="Judul Surat" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <input type="date" id="let-date" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <textarea id="let-content" rows="3" placeholder="Isi surat..." class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300"></textarea>
+            <div class="flex space-x-2">
+                <button onclick="closeAddLetterModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveNewLetter()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bucket-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">📝 Tambah Bucket List</h3>
+            <input type="text" id="bucket-text-input" placeholder="Kegiatan..." class="w-full text-xs p-3 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <div class="flex space-x-2">
+                <button onclick="closeAddBucketModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveNewBucket()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Tambah</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="map-modal" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-modal p-6 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 class="font-bold text-pink-900 text-sm">🗺️ Tambah Tempat Kenangan</h3>
+            <input type="text" id="map-title" placeholder="Nama Tempat" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <input type="text" id="map-link" placeholder="Link Google Maps" class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300">
+            <div class="flex space-x-2">
+                <button onclick="closeAddMapModal()" class="w-1/2 py-2 bg-pink-200 text-pink-900 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveNewMap()" class="w-1/2 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-pink-900 text-pink-100 border border-pink-300 text-xs px-4 py-2.5 rounded-full shadow-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none"></div>
+
+    <script>
+        let isOwner = false;
+        let startDate = localStorage.getItem('zenn_start_date') || '2024-01-01';
+        
+        let albums = JSON.parse(localStorage.getItem('zenn_albums')) || [
+            { id: 1, title: 'Kenangan Boneka Kita 🧸💖', photos: [{ id: 101, url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500', caption: 'Pelukan Pertama' }] }
+        ];
+
+        let moodHistory = JSON.parse(localStorage.getItem('zenn_moods')) || [];
+        let calendarEvents = JSON.parse(localStorage.getItem('zenn_calendar')) || [{ id: 1, title: 'Tanggal Jadian 💖', date: '2024-01-01' }];
+        let letters = JSON.parse(localStorage.getItem('zenn_letters')) || [{ id: 1, title: 'Surat 1 Tahun 🧸', date: '2025-01-01', content: 'Terima kasih sudah selalu menemaniku.' }];
+        let bucketList = JSON.parse(localStorage.getItem('zenn_buckets')) || [{ id: 1, text: 'Menonton film bersama 🧸', done: false }];
+        let mapLocations = JSON.parse(localStorage.getItem('zenn_maps')) || [{ id: 1, title: 'Tempat Pertama Kali Bertemu 💖', link: 'https://maps.google.com' }];
+        let chatMessages = JSON.parse(localStorage.getItem('zenn_chats')) || [{ sender: 'Sayang', text: 'Hai! Jangan lupa senyum ya hari ini 🧸💖' }];
+
+        let bios = JSON.parse(localStorage.getItem('zenn_bios')) || {
+            1: { name: 'Kamu', call: 'Sayang', hobi: 'Musik', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300' },
+            2: { name: 'Pasangan', call: 'Cinta', hobi: 'Menulis', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300' }
+        };
+
+        let playlist = JSON.parse(localStorage.getItem('zenn_playlist')) || [
+            { title: "Romantis Song 1", url: "https://www.bensound.com/bensound-music/bensound-tenderness.mp3" },
+            { title: "Romantis Song 2", url: "https://www.bensound.com/bensound-music/bensound-memories.mp3" }
+        ];
+        let currentSongIdx = 0;
+        let isPlaying = false;
+        let activeAlbumId = null;
+        let currentTab = null;
+
+        const audioEl = document.getElementById('bg-audio');
+        audioEl.addEventListener('ended', () => { skipSong(); });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => { toast.classList.remove('opacity-100'); toast.classList.add('opacity-0'); }, 3000);
+        }
+
+        function exportData() {
+            const data = { startDate, albums, moodHistory, calendarEvents, letters, bucketList, mapLocations, chatMessages, bios, playlist };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "zennwithniaa_backup.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+            showToast('Data berhasil disimpan secara permanen! 📥💖');
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            activeAlbumId = null;
+            const home = document.getElementById('home-view');
+            const subContainer = document.getElementById('sub-view-container');
+            const subContent = document.getElementById('sub-view-content');
+
+            home.classList.add('envelope-out');
+            setTimeout(() => {
+                home.classList.add('hidden');
+                home.classList.remove('envelope-out');
+                
+                subContainer.classList.remove('hidden');
+                subContainer.classList.add('envelope-in');
+                subContent.innerHTML = getTemplateContent(tabName);
+                renderSubViewData(tabName);
+            }, 250);
+        }
+
+        function openAlbumDetail(albumId) {
+            activeAlbumId = albumId;
+            const subContent = document.getElementById('sub-view-content');
+            subContent.classList.add('envelope-out');
+            setTimeout(() => {
+                subContent.innerHTML = getTemplateContent('album_detail');
+                renderAlbumDetailData(albumId);
+                subContent.classList.remove('envelope-out');
+                subContent.classList.add('envelope-in');
+            }, 200);
+        }
+
+        function goBackHome() {
+            if(activeAlbumId !== null) {
+                activeAlbumId = null;
+                const subContent = document.getElementById('sub-view-content');
+                subContent.classList.add('envelope-out');
+                setTimeout(() => {
+                    subContent.innerHTML = getTemplateContent('foto');
+                    renderSubViewData('foto');
+                    subContent.classList.remove('envelope-out');
+                    subContent.classList.add('envelope-in');
+                }, 200);
+                return;
+            }
+            currentTab = null;
+            const home = document.getElementById('home-view');
+            const subContainer = document.getElementById('sub-view-container');
+
+            subContainer.classList.add('envelope-out');
+            setTimeout(() => {
+                subContainer.classList.add('hidden');
+                subContainer.classList.remove('envelope-out');
+
+                home.classList.remove('hidden');
+                home.classList.add('envelope-in');
+                setTimeout(() => home.classList.remove('envelope-in'), 300);
+            }, 250);
+        }
+
+        function getTemplateContent(tab) {
+            if(tab === 'album_detail') {
+                const alb = albums.find(a => a.id === activeAlbumId) || albums[0];
+                return `
+                    <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                        <div class="flex justify-between items-center">
+                            <div><h2 class="font-bold text-pink-900 text-base">📁 ${alb.title}</h2><p class="text-xs text-pink-800 font-medium">Pilih hingga 20 foto sekaligus.</p></div>
+                            <div class="owner-only ${isOwner ? '' : 'hidden'}">
+                                <label class="cursor-pointer bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow transition flex items-center space-x-1">
+                                    <span>➕ Tambah Foto (Maks 20)</span>
+                                    <input type="file" accept="image/*" multiple class="hidden" onchange="addMultiplePhotosToAlbum(event)">
+                                </label>
+                            </div>
+                        </div>
+                        <div id="album-photos-grid" class="grid grid-cols-2 gap-3 pt-2"></div>
+                    </div>`;
+            }
+            switch(tab) {
+                case 'durasi':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl text-center space-y-4 border-2 border-white">
+                            <h2 class="font-bold text-pink-900 text-base">🧸 Lama Jalananya Hubungan Kita 💖</h2>
+                            <div class="space-y-2 text-left bg-white/50 p-3 rounded-2xl owner-only hidden border border-pink-300">
+                                <label class="text-[10px] font-bold text-pink-800 uppercase">Tanggal Jadian:</label>
+                                <div class="flex space-x-2">
+                                    <input type="date" id="start-date-input" class="w-full text-xs p-2 rounded-xl bg-white text-pink-900 border border-pink-300">
+                                    <button onclick="updateStartDate()" class="px-4 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Atur</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 pt-2">
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-tahun" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Tahun</div></div>
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-bulan" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Bulan</div></div>
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-hari" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Hari</div></div>
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-jam" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Jam</div></div>
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-menit" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Menit</div></div>
+                                <div class="bg-white/60 p-4 rounded-2xl border border-pink-200 shadow-sm"><div id="val-detik" class="text-3xl font-extrabold text-pink-600">0</div><div class="text-[10px] uppercase text-pink-800 font-bold mt-1">Detik</div></div>
+                            </div>
+                        </div>`;
+                case 'foto':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <div class="flex justify-between items-center">
+                                <div><h2 class="font-bold text-pink-900 text-base">📸 Album Foto Boneka & Kita</h2><p class="text-xs text-pink-800 font-medium">Klik album untuk melihat seluruh foto.</p></div>
+                                <div class="owner-only hidden"><button onclick="openAddAlbumModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow">➕ Buat Album</button></div>
+                            </div>
+                            <div id="albums-container" class="space-y-3 pt-2"></div>
+                        </div>`;
+                case 'mood':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <h2 class="font-bold text-pink-900 text-base">😊 Catat Suasana Hati Hari Ini</h2>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="recordMood('😊 B AJA SII')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">😊 B AJA SII</button>
+                                <button onclick="recordMood('🥰 SYENENGG BANGEDD')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">🥰 SYENENGG BANGEDD</button>
+                                <button onclick="recordMood('😴 Ngantukk, mauu di pok pok')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">😴 Ngantukk, mauu di pok pok</button>
+                                <button onclick="recordMood('😔 Capekk')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">😔 Capekk</button>
+                                <button onclick="recordMood('😤 betmuttt')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">😤 betmuttt</button>
+                                <button onclick="recordMood('🤗 MAU PEYUKK...!!!')" class="p-3 bg-white/60 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300 shadow-sm">🤗 MAU PEYUKK...!!!</button>
+                            </div>
+                            <div class="pt-3 border-t border-pink-300"><h3 class="font-bold text-pink-900 text-xs mb-2">Riwayat Mood:</h3><div id="mood-history" class="space-y-1.5 max-h-40 overflow-y-auto"></div></div>
+                        </div>`;
+                case 'kalender':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <div class="flex justify-between items-center"><h2 class="font-bold text-pink-900 text-base">📆 Kalender Momen Spesial</h2><div class="owner-only hidden"><button onclick="openAddCalendarModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow">➕ Tambah</button></div></div>
+                            <div id="calendar-list" class="space-y-2"></div>
+                        </div>`;
+                case 'surat':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <div class="flex justify-between items-center"><h2 class="font-bold text-pink-900 text-base">💬 Buku Pesan untuk Masa Depan</h2><div class="owner-only hidden"><button onclick="openAddLetterModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow">➕ Tulis Surat</button></div></div>
+                            <div id="letters-list" class="space-y-3"></div>
+                        </div>`;
+                case 'game':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white text-center">
+                            <h2 class="font-bold text-pink-900 text-base">🎮 Mini Game Pasangan</h2>
+                            <div class="flex justify-center space-x-2 pt-2">
+                                <button onclick="switchGame(1)" class="px-3 py-1.5 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Puzzle Foto</button>
+                                <button onclick="switchGame(2)" class="px-3 py-1.5 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Kuis Siapakah Aku</button>
+                                <button onclick="switchGame(3)" class="px-3 py-1.5 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Jokes Pilihan</button>
+                            </div>
+                            <div id="game-body" class="pt-3 text-left"></div>
+                        </div>`;
+                case 'bucket':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <div class="flex justify-between items-center"><h2 class="font-bold text-pink-900 text-base">📝 Bucket List Pasangan</h2><div class="owner-only hidden"><button onclick="openAddBucketModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow">➕ Tambah</button></div></div>
+                            <div id="bucket-list" class="space-y-2"></div>
+                        </div>`;
+                case 'peta':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-4 border-2 border-white">
+                            <div class="flex justify-between items-center"><h2 class="font-bold text-pink-900 text-base">🗺️ Peta Kenangan Cinta</h2><div class="owner-only hidden"><button onclick="openAddMapModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow">➕ Tambah Lokasi</button></div></div>
+                            <div id="map-list" class="space-y-3"></div>
+                        </div>`;
+                case 'chat':
+                    return `
+                        <div class="glass p-5 rounded-3xl shadow-xl space-y-3 border-2 border-white">
+                            <h2 class="font-bold text-pink-900 text-base">🌌 Pesan Rahasia (Chat Mini)</h2>
+                            <div id="chat-messages" class="bg-white/60 p-3 rounded-2xl h-56 overflow-y-auto space-y-2 border border-pink-300 text-xs font-medium text-pink-950"></div>
+                            <div class="flex space-x-2">
+                                <input type="text" id="chat-input" placeholder="Tulis pesan cinta rahasia..." class="w-full text-xs p-2.5 rounded-xl bg-white text-pink-900 border border-pink-300 focus:outline-none">
+                                <button onclick="sendChatMessage()" class="px-4 py-2 bg-pink-600 text-white text-xs font-bold rounded-xl shadow">Kirim</button>
+                            </div>
+                        </div>`;
+                case 'biodata':
+                    return `
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="glass p-5 rounded-3xl shadow-xl space-y-3 border-2 border-white">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-pink-900 text-sm">🧸 <span id="bio1-name-title">Kamu</span></h3>
+                                    <div class="owner-only hidden space-x-1">
+                                        <button onclick="editBioText(1)" class="text-[10px] bg-pink-600 text-white px-2 py-1 rounded-lg font-semibold shadow">Ubah Biodata</button>
+                                        <button onclick="editBioPhoto(1)" class="text-[10px] bg-rose-600 text-white px-2 py-1 rounded-lg font-semibold shadow">Ubah Foto</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <img id="bio1-img" src="" class="w-20 h-20 rounded-2xl object-cover border-2 border-white shadow-md">
+                                    <div class="text-xs space-y-1 text-pink-950 font-medium">
+                                        <p><strong class="text-pink-700">Nama:</strong> <span id="bio1-name"></span></p>
+                                        <p><strong class="text-pink-700">Panggilan:</strong> <span id="bio1-call"></span></p>
+                                        <p><strong class="text-pink-700">Hobi:</strong> <span id="bio1-hobi"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-5 rounded-3xl shadow-xl space-y-3 border-2 border-white">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-pink-900 text-sm">💖 <span id="bio2-name-title">Pasangan</span></h3>
+                                    <div class="owner-only hidden space-x-1">
+                                        <button onclick="editBioText(2)" class="text-[10px] bg-pink-600 text-white px-2 py-1 rounded-lg font-semibold shadow">Ubah Biodata</button>
+                                        <button onclick="editBioPhoto(2)" class="text-[10px] bg-rose-600 text-white px-2 py-1 rounded-lg font-semibold shadow">Ubah Foto</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <img id="bio2-img" src="" class="w-20 h-20 rounded-2xl object-cover border-2 border-white shadow-md">
+                                    <div class="text-xs space-y-1 text-pink-950 font-medium">
+                                        <p><strong class="text-pink-700">Nama:</strong> <span id="bio2-name"></span></p>
+                                        <p><strong class="text-pink-700">Panggilan:</strong> <span id="bio2-call"></span></p>
+                                        <p><strong class="text-pink-700">Hobi:</strong> <span id="bio2-hobi"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+        }
+
+        function renderSubViewData(tab) {
+            if(isOwner) {
+                document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden'));
+            }
+            if(tab === 'durasi') {
+                document.getElementById('start-date-input').value = startDate;
+                updateDuration();
+            } else if(tab === 'foto') { renderAlbums(); }
+            else if(tab === 'mood') { renderMoods(); }
+            else if(tab === 'kalender') { renderCalendar(); }
+            else if(tab === 'surat') { renderLetters(); }
+            else if(tab === 'game') { switchGame(1); }
+            else if(tab === 'bucket') { renderBucketList(); }
+            else if(tab === 'peta') { renderMaps(); }
+            else if(tab === 'chat') { renderChats(); }
+            else if(tab === 'biodata') { renderBios(); }
+        }
+
+        function renderAlbumDetailData(albumId) {
+            const alb = albums.find(a => a.id === albumId);
+            const grid = document.getElementById('album-photos-grid');
+            if(!grid || !alb) return;
+            
+            let html = '';
+            alb.photos.forEach(p => {
+                html += `
+                    <div class="bg-white/70 p-2 rounded-2xl shadow-sm relative group">
+                        <img src="${p.url}" class="w-full h-32 object-cover rounded-xl" alt="Foto" loading="lazy">
+                        <p class="text-[10px] text-pink-900 font-medium mt-1.5 text-center truncate">${p.caption}</p>
+                        <div class="owner-only ${isOwner ? '' : 'hidden'} pt-1 text-center">
+                            <button onclick="deletePhotoFromAlbum(${alb.id}, ${p.id})" class="text-[10px] text-red-500 font-bold hover:underline">Hapus Foto</button>
+                        </div>
+                    </div>`;
+            });
+            if(alb.photos.length === 0) {
+                html = '<p class="text-xs text-pink-800 italic col-span-2 text-center py-6">Belum ada foto di album ini.</p>';
+            }
+            grid.innerHTML = html;
+            if(isOwner) {
+                document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        function addMultiplePhotosToAlbum(event) {
+            const files = event.target.files;
+            if(files.length > 0 && activeAlbumId !== null) {
+                const alb = albums.find(a => a.id === activeAlbumId);
+                if(alb) {
+                    const limit = Math.min(files.length, 20);
+                    let processed = 0;
+                    showToast('Memproses foto secara instan... ⏳');
+                    for(let i = 0; i < limit; i++) {
+                        const file = files[i];
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = new Image();
+                            img.onload = function() {
+                                const canvas = document.createElement('canvas');
+                                let width = img.width;
+                                let height = img.height;
+                                const maxDim = 800;
+                                if (width > height && width > maxDim) {
+                                    height *= maxDim / width;
+                                    width = maxDim;
+                                } else if (height > maxDim) {
+                                    width *= maxDim / height;
+                                    height = maxDim;
+                                }
+                                canvas.width = width;
+                                canvas.height = height;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, width, height);
+                                const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                                alb.photos.push({ id: Date.now() + Math.random(), url: optimizedUrl, caption: 'Momen Indah ❤️' });
+                                processed++;
+
+                                if(processed === limit) {
+                                    localStorage.setItem('zenn_albums', JSON.stringify(albums));
+                                    renderAlbumDetailData(activeAlbumId);
+                                    showToast(`${limit} foto berhasil ditambahkan! 📸✨`);
+                                }
+                            };
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+        }
+
+        function deletePhotoFromAlbum(albumId, photoId) {
+            if(confirm('Hapus foto ini?')) {
+                const alb = albums.find(a => a.id === albumId);
+                if(alb) {
+                    alb.photos = alb.photos.filter(p => p.id !== photoId);
+                    localStorage.setItem('zenn_albums', JSON.stringify(albums));
+                    renderAlbumDetailData(albumId);
+                    showToast('Foto berhasil dihapus.');
+                }
+            }
+        }
+
+        function uploadSong(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    playlist.push({ title: file.name.replace(/\.[^/.]+$/, ""), url: e.target.result });
+                    localStorage.setItem('zenn_playlist', JSON.stringify(playlist));
+                    showToast('Lagu full MP3 berhasil diunggah! 🎵');
+                    changeSong(playlist.length - 1, file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function searchTracks() {
+            const query = document.getElementById('song-search-input').value.trim();
+            const resultsContainer = document.getElementById('search-results');
+            if(!resultsContainer) return;
+            resultsContainer.innerHTML = '<p class="text-[10px] text-pink-800">Mencari lagu...</p>';
+            try {
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=4`);
+                const data = await res.json();
+                resultsContainer.innerHTML = '';
+                if (data.results.length === 0) {
+                    resultsContainer.innerHTML = '<p class="text-[10px] text-pink-800">Lagu tidak ditemukan.</p>';
+                    return;
+                }
+                data.results.forEach(song => {
+                    resultsContainer.innerHTML += `
+                        <div class="flex items-center justify-between text-[11px] p-2 rounded-xl bg-white/70 text-pink-900 border border-pink-200">
+                            <div class="truncate pr-2">🎵 <strong>${song.trackName}</strong> - <span class="text-pink-700">${song.artistName}</span></div>
+                            <button onclick="addSongToPlaylist('${song.trackName.replace(/'/g, "")}', '${song.previewUrl}')" class="px-2 py-1 bg-pink-600 text-white rounded-lg text-[10px] shadow">Pilih</button>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                resultsContainer.innerHTML = '<p class="text-[10px] text-red-600">Gagal mencari lagu.</p>';
+            }
+        }
+
+        function addSongToPlaylist(title, url) {
+            playlist.push({ title, url });
+            localStorage.setItem('zenn_playlist', JSON.stringify(playlist));
+            showToast(`Lagu ${title} berhasil dipilih!`);
+            changeSong(playlist.length - 1, title);
+        }
+
+        function togglePlayMusic() {
+            if (isPlaying) {
+                audioEl.pause();
+                isPlaying = false;
+                document.getElementById('play-text').innerText = 'Putar';
+                document.getElementById('play-icon').innerText = '▶️';
+            } else {
+                if (!audioEl.src) audioEl.src = playlist[currentSongIdx].url;
+                audioEl.play().then(() => {
+                    isPlaying = true;
+                    document.getElementById('play-text').innerText = 'Jeda';
+                    document.getElementById('play-icon').innerText = '⏸️';
+                }).catch(() => alert('Pilih atau upload lagu terlebih dahulu!'));
+            }
+        }
+
+        function skipSong() {
+            currentSongIdx = (currentSongIdx + 1) % playlist.length;
+            changeSong(currentSongIdx, playlist[currentSongIdx].title);
+        }
+
+        function changeSong(idx, title) {
+            currentSongIdx = idx;
+            audioEl.src = playlist[idx].url;
+            audioEl.play().then(() => {
+                isPlaying = true;
+                document.getElementById('play-text').innerText = 'Jeda';
+                document.getElementById('play-icon').innerText = '⏸️';
+                document.getElementById('current-song-title').innerText = title;
+            }).catch(() => {});
+        }
+
+        function updateStartDate() {
+            const val = document.getElementById('start-date-input').value;
+            if(val) {
+                startDate = val;
+                localStorage.setItem('zenn_start_date', startDate);
+                updateDuration();
+                showToast('Tanggal jadian berhasil diperbarui! 💖');
+            }
+        }
+
+        function updateDuration() {
+            const start = new Date(startDate);
+            const now = new Date();
+            let diff = now - start;
+            if (diff < 0) diff = 0;
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            let years = now.getFullYear() - start.getFullYear();
+            let months = now.getMonth() - start.getMonth();
+            let days = now.getDate() - start.getDate();
+            if (days < 0) { months--; const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += prevMonth.getDate(); }
+            if (months < 0) { years--; months += 12; }
+            if(document.getElementById('val-tahun')) {
+                document.getElementById('val-tahun').innerText = years;
+                document.getElementById('val-bulan').innerText = months;
+                document.getElementById('val-hari').innerText = days;
+                document.getElementById('val-jam').innerText = hours;
+                document.getElementById('val-menit').innerText = minutes;
+                document.getElementById('val-detik').innerText = seconds;
+            }
+        }
+        setInterval(updateDuration, 1000);
+
+        function recordMood(moodText) {
+            const date = new Date().toLocaleDateString();
+            moodHistory.unshift({ date, mood: moodText });
+            localStorage.setItem('zenn_moods', JSON.stringify(moodHistory));
+            renderMoods();
+            showToast('Mood berhasil dicatat! 🧸💖');
+        }
+
+        function renderMoods() {
+            const container = document.getElementById('mood-history');
+            if(!container) return;
+            container.innerHTML = moodHistory.length === 0 ? '<p class="text-xs text-pink-800 italic">Belum ada catatan mood.</p>' : '';
+            moodHistory.forEach(m => {
+                container.innerHTML += `<div class="p-2 rounded-xl bg-white/70 text-xs text-pink-900 border border-pink-200 flex justify-between shadow-sm"><span>${m.mood}</span><span class="text-[10px] text-pink-600 font-semibold">${m.date}</span></div>`;
+            });
+        }
+
+        // Mini Games: Interactive Photo Jigsaw Puzzle with Album Integration
+        let puzzleState = {
+            currentPhotoUrl: '',
+            tiles: [0, 1, 2, 3],
+            selectedIdx: null,
+            isCompleted: false
+        };
+
+        function switchGame(type) {
+            const body = document.getElementById('game-body');
+            if(!body) return;
+            if(type === 1) {
+                initPuzzleGame();
+            } else if(type === 2) { renderQuiz(); }
+            else if(type === 3) { renderJoke(); }
+        }
+
+        function getRandomAlbumPhoto() {
+            let allPhotos = [];
+            albums.forEach(a => {
+                a.photos.forEach(p => {
+                    allPhotos.push(p.url);
+                });
+            });
+            if(allPhotos.length === 0) {
+                return 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500';
+            }
+            return allPhotos[Math.floor(Math.random() * allPhotos.length)];
+        }
+
+        function initPuzzleGame() {
+            puzzleState.currentPhotoUrl = getRandomAlbumPhoto();
+            puzzleState.tiles = [0, 1, 2, 3];
+            // Acak puzzle
+            do {
+                puzzleState.tiles.sort(() => Math.random() - 0.5);
+            } while(isPuzzleSolved()); // Pastikan tidak langsung tersusun saat awal
+            puzzleState.selectedIdx = null;
+            puzzleState.isCompleted = false;
+            renderPuzzleBoard();
+        }
+
+        function isPuzzleSolved() {
+            return puzzleState.tiles.every((val, idx) => val === idx);
+        }
+
+        function renderPuzzleBoard() {
+            const body = document.getElementById('game-body');
+            if(!body) return;
+
+            let tilesHTML = '';
+            puzzleState.tiles.forEach((tileVal, currentIdx) => {
+                const bgX = (tileVal % 2) * 100;
+                const bgY = Math.floor(tileVal / 2) * 100;
+                const borderStyle = puzzleState.selectedIdx === currentIdx ? 'border-4 border-yellow-400 scale-95' : 'border-2 border-white';
+                
+                tilesHTML += `
+                    <div onclick="handlePuzzleClick(${currentIdx})" 
+                         class="w-24 h-24 rounded-xl cursor-pointer shadow-md transition-transform duration-200 ${borderStyle}"
+                         style="background-image: url('${puzzleState.currentPhotoUrl}'); background-size: 200% 200%; background-position: ${bgX}% ${bgY}%;">
+                    </div>
+                `;
+            });
+
+            let actionHTML = '';
+            if(puzzleState.isCompleted) {
+                actionHTML = `
+                    <div class="space-y-2 pt-2 animate-bounce">
+                        <p class="text-xs font-bold text-pink-700">🎉 Hore! Puzzle Berhasil Disusun! 💖</p>
+                        <div class="flex space-x-2">
+                            <button onclick="goBackHome()" class="w-1/2 py-2 bg-pink-200 hover:bg-pink-300 text-pink-900 rounded-xl text-xs font-bold shadow">Selesai</button>
+                            <button onclick="initPuzzleGame()" class="w-1/2 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-xs font-bold shadow">Lanjutkan</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                actionHTML = `<p class="text-[11px] text-pink-800 italic text-center">Ketuk dua potongan foto untuk saling menukar posisi hingga tersusun rapi!</p>`;
+            }
+
+            body.innerHTML = `
+                <div class="space-y-3 flex flex-col items-center">
+                    <p class="text-xs font-bold text-pink-900">🧩 Puzzle Foto Kenangan Album</p>
+                    <div class="grid grid-cols-2 gap-2 bg-white/40 p-3 rounded-2xl border border-pink-300">
+                        ${tilesHTML}
+                    </div>
+                    ${actionHTML}
+                </div>
+            `;
+        }
+
+        function handlePuzzleClick(idx) {
+            if(puzzleState.isCompleted) return;
+
+            if(puzzleState.selectedIdx === null) {
+                puzzleState.selectedIdx = idx;
+            } else {
+                // Tukar posisi puzzle
+                let temp = puzzleState.tiles[puzzleState.selectedIdx];
+                puzzleState.tiles[puzzleState.selectedIdx] = puzzleState.tiles[idx];
+                puzzleState.tiles[idx] = temp;
+                puzzleState.selectedIdx = null;
+
+                // Cek apakah sudah selesai
+                if(isPuzzleSolved()) {
+                    puzzleState.isCompleted = true;
+                    showToast('Hebat! Puzzle berhasil diselesaikan! 🧩💖');
+                }
+            }
+            renderPuzzleBoard();
+        }
+
+        const aiQuizQuestions = [
+            { q: "Siapa yang paling sering ngambek tapi minta dipeluk?", opts: ["Kamu", "Pasangan", "Dua-duanya", "Boneka"], ans: 2 },
+            { q: "Apa panggilan kesayangan di antara kalian?", opts: ["Sayang/Cinta", "Bro/Sis", "Hey Kamu", "Partner"], ans: 0 },
+            { q: "Siapa yang paling jago bikin ketawa?", opts: ["Kamu", "Pasangan", "Google", "Teddy Bear"], ans: 1 },
+            { q: "Di mana tempat impian yang mau dikunjungi?", opts: ["Pantai", "Gunung", "Luar Negeri", "Semua benar"], ans: 3 },
+            { q: "Siapa yang paling sering ngechat duluan?", opts: ["Kamu", "Pasangan", "Bergantian", "Sistem"], ans: 2 },
+            { q: "Apa warna nuansa kesukaan situs ini?", opts: ["Merah", "Pink & Putih", "Hitam", "Hijau"], ans: 1 },
+            { q: "Kalau lagi capek, biasanya minta apa?", opts: ["Peyuk/Pok-pok", "Uang", "Tidur", "Main Game"], ans: 0 },
+            { q: "Siapa yang paling sabar menghadapi pasangannya?", opts: ["Kamu", "Pasangan", "Saling sabar", "Tidak tahu"], ans: 2 },
+            { q: "Makanan apa yang sering dipesan pas kencan?", opts: ["Nasi Goreng", "Bakso", "Cafe Romantis", "Semua benar"], ans: 3 },
+            { q: "Seberapa besar rasa sayang kalian?", opts: ["Sebatas langit", "Seluas samudra", "Tak terhingga", "Biasa saja"], ans: 2 }
+        ];
+
+        const aiJokesQuestions = [
+            { q: "Kenapa pasangannya suka senyum-senyum sendiri?", opts: ["Lagi baca chat", "Kesurupan", "Gila", "Lupa pulang"], ans: 0 },
+            { q: "Bunga apa yang paling romantis buat pacar?", opts: ["Bunga bank", "Bunga bangkai", "Bunga cinta kita", "Bunga desa"], ans: 2 },
+            { q: "Kabel apa yang bikin kangen?", opts: ["Kabel listrik", "Kabel charger", "Kabelaku padamu", "Kabel LAN"], ans: 2 },
+            { q: "Mandi apa yang bikin hangat?", opts: ["Mandi air hangat", "Mandi kembang", "Mandangin kamu terus", "Mandi hujan"], ans: 2 },
+            { q: "Awan apa yang bikin senang?", opts: ["Awankamu", "Awan mendung", "Awan panas", "Awan cumulus"], ans: 0 },
+            { q: "Gajah apa yang bikin romantis?", opts: ["Gajah mada", "Gajah duduk", "Gajah-ah kau dengan cinta", "Gajah liar"], ans: 2 },
+            { q: "Kenapa malam dingin banget?", opts: ["Karena ga ada pelukan kamu", "Lagi musim hujan", "AC kepanasan", "Bumi jauh dari matahari"], ans: 0 },
+            { q: "Pocong apa yang disukai wanita?", opts: ["Pocong serem", "Pocongan harga diskon", "Pocong lompat", "Pocong jadi-jadian"], ans: 1 },
+            { q: "Susu apa yang bikin semangat?", opts: ["Susu sapi", "Susu kental manis", "Susah kalau gak ada kamu", "Susu kedelai"], ans: 2 },
+            { q: "Kucing apa yang romantis?", opts: ["Kucing angora", "Kucing persia", "Kucing-ta padamu", "Kucing garong"], ans: 2 }
+        ];
+
+        let currentQuizIdx = 0;
+        let currentJokeIdx = 0;
+
+        function renderQuiz() {
+            const q = aiQuizQuestions[currentQuizIdx];
+            const body = document.getElementById('game-body');
+            if(!body) return;
+            let optsHTML = '';
+            q.opts.forEach((o, i) => {
+                optsHTML += `<button onclick="checkQuizAns(${i}, ${q.ans})" class="w-full text-left p-2 bg-white/70 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300">${o}</button>`;
+            });
+            body.innerHTML = `
+                <div class="space-y-3">
+                    <p class="text-xs font-bold text-pink-900">🧠 Kuis Siapakah Aku (Soal ${currentQuizIdx+1}/10)</p>
+                    <p class="text-xs text-pink-950 font-medium">${q.q}</p>
+                    <div class="space-y-2">${optsHTML}</div>
+                    <p id="quiz-feedback" class="text-xs font-bold text-pink-700 pt-1"></p>
+                </div>
+            `;
+        }
+
+        function checkQuizAns(selected, correct) {
+            const fb = document.getElementById('quiz-feedback');
+            if(selected === correct) {
+                fb.innerText = "🎉 Benar! Kamu sangat memahaminya!";
+                setTimeout(() => {
+                    currentQuizIdx = (currentQuizIdx + 1) % aiQuizQuestions.length;
+                    renderQuiz();
+                }, 1500);
+            } else { fb.innerText = "❌ Kurang tepat, coba pilihan lain!"; }
+        }
+
+        function renderJoke() {
+            const q = aiJokesQuestions[currentJokeIdx];
+            const body = document.getElementById('game-body');
+            if(!body) return;
+            let optsHTML = '';
+            q.opts.forEach((o, i) => {
+                optsHTML += `<button onclick="checkJokeAns(${i}, ${q.ans})" class="w-full text-left p-2 bg-white/70 hover:bg-pink-200 rounded-xl text-xs text-pink-900 font-semibold border border-pink-300">${o}</button>`;
+            });
+            body.innerHTML = `
+                <div class="space-y-3">
+                    <p class="text-xs font-bold text-pink-900">💬 Jokes & Gombalan AI (Soal ${currentJokeIdx+1}/10)</p>
+                    <p class="text-xs text-pink-950 font-medium">${q.q}</p>
+                    <div class="space-y-2">${optsHTML}</div>
+                    <p id="joke-feedback" class="text-xs font-bold text-pink-700 pt-1"></p>
+                </div>
+            `;
+        }
+
+        function checkJokeAns(selected, correct) {
+            const fb = document.getElementById('joke-feedback');
+            if(selected === correct) {
+                fb.innerText = "💖 Hahaha, gombalannya kena banget!";
+                setTimeout(() => {
+                    currentJokeIdx = (currentJokeIdx + 1) % aiJokesQuestions.length;
+                    renderJoke();
+                }, 1500);
+            } else { fb.innerText = "❌ Yah salah, tebak lagi dong!"; }
+        }
+
+        function handleLogin() {
+            if(document.getElementById('login-user').value === 'zennwithniaa' && document.getElementById('login-pass').value === '090826') {
+                isOwner = true;
+                document.getElementById('auth-modal').classList.add('hidden');
+                document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden'));
+                document.getElementById('auth-text').innerText = 'Pemilik (Aktif)';
+                document.getElementById('export-btn').classList.remove('hidden');
+                showToast('Login berhasil sebagai pemilik! 🔓');
+            } else { alert('Salah password/username!'); }
+        }
+
+        function toggleAuthModal() { document.getElementById('auth-modal').classList.toggle('hidden'); }
+
+        function openAddCalendarModal() { document.getElementById('calendar-modal').classList.remove('hidden'); }
+        function closeAddCalendarModal() { document.getElementById('calendar-modal').classList.add('hidden'); }
+        function saveNewCalendar() {
+            const title = document.getElementById('cal-title').value;
+            const date = document.getElementById('cal-date').value;
+            if(title && date) {
+                calendarEvents.push({ id: Date.now(), title, date });
+                localStorage.setItem('zenn_calendar', JSON.stringify(calendarEvents));
+                closeAddCalendarModal(); renderCalendar(); showToast('Momen ditambahkan!');
+            }
+        }
+        function deleteCalendar(id) {
+            calendarEvents = calendarEvents.filter(c => c.id !== id);
+            localStorage.setItem('zenn_calendar', JSON.stringify(calendarEvents));
+            renderCalendar(); showToast('Momen dihapus.');
+        }
+        function renderCalendar() {
+            const cList = document.getElementById('calendar-list');
+            if(!cList) return;
+            cList.innerHTML = '';
+            calendarEvents.forEach(c => {
+                cList.innerHTML += `<div class="p-3 bg-white/70 rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-sm"><div><strong class="text-pink-900">${c.title}</strong><p class="text-[10px] text-pink-700">${c.date}</p></div>${isOwner ? `<button onclick="deleteCalendar(${c.id})" class="text-red-500 font-bold">Hapus</button>` : ''}</div>`;
+            });
+        }
+
+        function openAddLetterModal() { document.getElementById('letter-modal').classList.remove('hidden'); }
+        function closeAddLetterModal() { document.getElementById('letter-modal').classList.add('hidden'); }
+        function saveNewLetter() {
+            const title = document.getElementById('let-title').value;
+            const date = document.getElementById('let-date').value;
+            const content = document.getElementById('let-content').value;
+            if(title && date && content) {
+                letters.push({ id: Date.now(), title, date, content });
+                localStorage.setItem('zenn_letters', JSON.stringify(letters));
+                closeAddLetterModal(); renderLetters(); showToast('Surat disimpan!');
+            }
+        }
+        function deleteLetter(id) {
+            letters = letters.filter(l => l.id !== id);
+            localStorage.setItem('zenn_letters', JSON.stringify(letters));
+            renderLetters(); showToast('Surat dihapus.');
+        }
+        function renderLetters() {
+            const lList = document.getElementById('letters-list');
+            if(!lList) return;
+            lList.innerHTML = '';
+            letters.forEach(l => {
+                lList.innerHTML += `<div class="p-3 bg-white/70 rounded-xl border border-pink-200 space-y-1 text-xs shadow-sm"><div class="flex justify-between"><strong class="text-pink-900">${l.title}</strong><span class="text-[10px] text-pink-600 font-semibold">Buka: ${l.date}</span></div><p class="text-pink-950 italic">"${l.content}"</p>${isOwner ? `<button onclick="deleteLetter(${l.id})" class="text-red-500 font-bold text-[10px]">Hapus Surat</button>` : ''}</div>`;
+            });
+        }
+
+        function openAddBucketModal() { document.getElementById('bucket-modal').classList.remove('hidden'); }
+        function closeAddBucketModal() { document.getElementById('bucket-modal').classList.add('hidden'); }
+        function saveNewBucket() {
+            const text = document.getElementById('bucket-text-input').value;
+            if(text) {
+                bucketList.push({ id: Date.now(), text, done: false });
+                localStorage.setItem('zenn_buckets', JSON.stringify(bucketList));
+                closeAddBucketModal(); renderBucketList(); showToast('Bucket list ditambah!');
+            }
+        }
+        function deleteBucket(id) {
+            bucketList = bucketList.filter(b => b.id !== id);
+            localStorage.setItem('zenn_buckets', JSON.stringify(bucketList));
+            renderBucketList(); showToast('Bucket list dihapus.');
+        }
+        function renderBucketList() {
+            const bList = document.getElementById('bucket-list');
+            if(!bList) return;
+            bList.innerHTML = '';
+            bucketList.forEach(b => {
+                bList.innerHTML += `<div class="p-2.5 bg-white/70 rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-sm"><span class="text-pink-900 font-medium">🧸 ${b.text}</span>${isOwner ? `<button onclick="deleteBucket(${b.id})" class="text-red-500 font-bold">Hapus</button>` : ''}</div>`;
+            });
+        }
+
+        function openAddMapModal() { document.getElementById('map-modal').classList.remove('hidden'); }
+        function closeAddMapModal() { document.getElementById('map-modal').classList.add('hidden'); }
+        function saveNewMap() {
+            const title = document.getElementById('map-title').value;
+            const link = document.getElementById('map-link').value;
+            if(title && link) {
+                mapLocations.push({ id: Date.now(), title, link });
+                localStorage.setItem('zenn_maps', JSON.stringify(mapLocations));
+                closeAddMapModal(); renderMaps(); showToast('Lokasi disimpan!');
+            }
+        }
+        function deleteMap(id) {
+            mapLocations = mapLocations.filter(m => m.id !== id);
+            localStorage.setItem('zenn_maps', JSON.stringify(mapLocations));
+            renderMaps(); showToast('Lokasi dihapus.');
+        }
+        function renderMaps() {
+            const mList = document.getElementById('map-list');
+            if(!mList) return;
+            mList.innerHTML = '';
+            mapLocations.forEach(m => {
+                mList.innerHTML += `<div class="p-3 bg-white/70 rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-sm"><div><strong class="text-pink-900">📍 ${m.title}</strong><br><a href="${m.link}" target="_blank" class="text-pink-600 underline text-[10px] font-bold">Buka di Google Maps</a></div>${isOwner ? `<button onclick="deleteMap(${m.id})" class="text-red-500 font-bold">Hapus</button>` : ''}</div>`;
+            });
+        }
+
+        function openAddAlbumModal() { document.getElementById('album-modal').classList.remove('hidden'); }
+        function closeAddAlbumModal() { document.getElementById('album-modal').classList.add('hidden'); }
+        function saveNewAlbum() {
+            const title = document.getElementById('new-album-name').value;
+            if(title) {
+                albums.unshift({ id: Date.now(), title, photos: [] });
+                localStorage.setItem('zenn_albums', JSON.stringify(albums));
+                closeAddAlbumModal(); renderAlbums(); showToast('Album dibuat!');
+            }
+        }
+        function deleteAlbum(id) {
+            albums = albums.filter(a => a.id !== id);
+            localStorage.setItem('zenn_albums', JSON.stringify(albums));
+            renderAlbums(); showToast('Album dihapus.');
+        }
+        function renderAlbums() {
+            const container = document.getElementById('albums-container');
+            if(!container) return;
+            let html = '';
+            albums.forEach(a => {
+                html += `
+                    <div class="glass p-4 rounded-2xl border border-pink-300 space-y-2 shadow-md hover:bg-white/60 transition flex justify-between items-center">
+                        <div onclick="openAlbumDetail(${a.id})" class="cursor-pointer flex-1">
+                            <h3 class="font-bold text-pink-900 text-xs">📁 ${a.title}</h3>
+                            <span class="text-[10px] text-pink-700 font-semibold">${a.photos.length} Foto 📸 (Klik untuk buka)</span>
+                        </div>
+                        ${isOwner ? `<button onclick="deleteAlbum(${a.id})" class="text-red-500 text-xs font-bold p-2">Hapus Album</button>` : ''}
+                    </div>`;
+            });
+            if(albums.length === 0) {
+                html = '<p class="text-xs text-pink-800 italic text-center py-4">Belum ada album.</p>';
+            }
+            container.innerHTML = html;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            if(input && input.value.trim()) {
+                chatMessages.push({ sender: isOwner ? 'Pemilik' : 'Pasangan', text: input.value });
+                localStorage.setItem('zenn_chats', JSON.stringify(chatMessages));
+                input.value = '';
+                renderChats();
+            }
+        }
+        function renderChats() {
+            const box = document.getElementById('chat-messages');
+            if(!box) return;
+            box.innerHTML = '';
+            chatMessages.forEach(c => {
+                box.innerHTML += `<div><strong class="text-pink-700">${c.sender}:</strong> <span class="text-pink-950">${c.text}</span></div>`;
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function editBioText(i) {
+            const name = prompt('Nama:', bios[i].name) || bios[i].name;
+            const call = prompt('Panggilan:', bios[i].call) || bios[i].call;
+            const hobi = prompt('Hobi:', bios[i].hobi) || bios[i].hobi;
+            bios[i] = { ...bios[i], name, call, hobi };
+            localStorage.setItem('zenn_bios', JSON.stringify(bios));
+            renderBios();
+            showToast('Biodata berhasil diperbarui! 🧸');
+        }
+
+        function editBioPhoto(i) {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = e => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = event => {
+                        bios[i].img = event.target.result;
+                        localStorage.setItem('zenn_bios', JSON.stringify(bios));
+                        renderBios();
+                        showToast('Foto profil berhasil diunggah! ✨');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            fileInput.click();
+        }
+
+        function renderBios() {
+            for(let i=1; i<=2; i++) {
+                if(document.getElementById(`bio${i}-name-title`)) {
+                    document.getElementById(`bio${i}-name-title`).innerText = bios[i].name;
+                    document.getElementById(`bio${i}-name`).innerText = bios[i].name;
+                    document.getElementById(`bio${i}-call`).innerText = bios[i].call;
+                    document.getElementById(`bio${i}-hobi`).innerText = bios[i].hobi;
+                    document.getElementById(`bio${i}-img`).src = bios[i].img;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
